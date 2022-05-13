@@ -4,10 +4,10 @@ import time
 def count_time(func1):
     def wrap(*args,**kargs):
         start_time=time.time()
-        func1()
+        func1(*args,**kargs)
         end_time=time.time()
         spend_time=end_time-start_time
-        print("this function spent",spend_time,"second")
+        print("This function spent",spend_time,"second")
     
     return wrap
 
