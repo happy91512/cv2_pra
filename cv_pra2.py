@@ -33,11 +33,11 @@ img = cv.imread("frogg.jpg", cv.IMREAD_GRAYSCALE)
 saveP = input("Enter the save path for dft graph:")
 aa = get_dft(img, saveP)
 f_img =cv.imread(saveP, cv.IMREAD_UNCHANGED)
-cv.imshow("hi", f_img) #Show dft img.
+cv.imshow("DFT", f_img) #Show dft img.
 cv.waitKey(0)
-cv.destroyWindow("hi")
+cv.destroyWindow("DFT")
 iaa = get_idft(aa, input("Enter the save path for idft graph:"))
-cv.imshow("hii", iaa) #Show idft img.
+cv.imshow("IDFT", iaa) #Show idft img.
 cv.waitKey(0)
-cv.destroyWindow("hii") 
+cv.destroyWindow("IDFT") 
 
