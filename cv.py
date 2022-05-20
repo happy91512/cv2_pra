@@ -1,13 +1,13 @@
 import cv2
 import time
-
+import numpy
 def count_time(func1):
     def wrap(*args,**kargs):
         start_time=time.time()
         func1(*args,**kargs)
         end_time=time.time()
         spend_time=end_time-start_time
-        print("This function spent",spend_time,"second")
+        print("This function spent",spend_time,"seconds")
     
     return wrap
 

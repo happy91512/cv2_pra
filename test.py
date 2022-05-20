@@ -1,27 +1,41 @@
-import cv2
-import time
+from sys import flags
+import numpy as np
+import cv2 as cv
+import os
+from matplotlib import pyplot as plt
 
-def count_time(func1):
-    def wrap(*args,**kargs):
-        start_time=time.time()
-        func1(*args,**kargs)
-        end_time=time.time()
-        spend_time=end_time-start_time
-        print("This function spent",spend_time,"second")
-    
-    return wrap
+def get_dft(arr:np.ndarray, savePath:str):
+    dft_arr = cv.dft(np.float32(arr) , flags = cv.DFT_COMPLEX_OUTPUT)
+    dft_shift = np.fft.fftshift(dft_arr)
+    spectrum = 20*np.log(cv.magnitude(dft_shift[:,:,0], dft_shift[:,:,1]))
 
-@count_time
-def show_img(path,savePath):
-    image1=cv2.imread(path,cv2.IMREAD_UNCHANGED)
-    print(path,savePath)
-    cv2.imshow("123",image1)
-    cv2.imwrite(savePath,image1)
-    cv2.waitKey(0)
-    cv2.destroyWindow("123")
-    return
+    plt.subplot(),plt.imshow(spectrum, cmap = 'gray'),
+    plt.xticks([]), plt.yticks([])
+    plt.imsave(savePath, spectrum)
+    #plt.savefig(savePath, bbox_inches='tight')
+    gray_img=cv.imread(savePath, cv.IMREAD_GRAYSCALE)
+    os.remove(savePath)
+    cv.imwrite(savePath, gray_img)
+    print(gray_img)
+    return gray_img
+   
+def get_idft(arr:np.ndarray , savePath:str):
+    idft_shift = np.fft.ifftshift(arr)
+    idft_arr = cv.idft(idft_shift)
+    spectrum = 20*np.log(cv.magnitude(idft_shift[:,:,0], idft_shift[:,:,1]))
+    plt.xticks([]), plt.yticks([])
+    plt.imsave(savePath, spectrum)
+    back_img=cv.imread(savePath, cv.IMREAD_GRAYSCALE)
+    os.remove(savePath)
+    cv.imwrite(savePath, back_img)
+    return back_img
 
-read_path=str(input("Enter read path:"))
-save_path=str(input("Enter save path:"))
-show_img(read_path,save_path)
-
+img = cv.imread("frogg.jpg" , cv.IMREAD_GRAYSCALE)
+aa = get_dft(img, input("Enter the save path for dft graph."))
+#cv.imshow("hi", aa)
+#cv.waitKey(0)
+#cv.destroyWindow("hi")
+#iaa = get_idft("/home/tdd/11111.jpg", input("Enter the save path for idft graph."))
+#cv.imshow("hii", iaa)
+#cv.waitKey(0)
+#cv.destroyWindow("hii")
